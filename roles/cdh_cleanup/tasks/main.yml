@@ -28,6 +28,11 @@
     - /var/lib/cloudera-scm-agent/uuid
     - /var/lib/cloudera-scm-navigator/instance.uuid
 
+- name: Unmount Clouderea tmpfs
+  mount:
+    path: /var/run/cloudera-scm-agent/process
+    state: unmounted
+
 - name: Recursively remove cloudera parcels
   file:
     path: "{{ item }}"
@@ -54,3 +59,5 @@
     - /var/log/impalad
     - /var/log/catalogd
     - /var/log/hadoop-yarn
+    - /var/run/cloudera-scm-agent
+    - /var/run/cloudera-scm-server
