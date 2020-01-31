@@ -1,0 +1,83 @@
+- name: Get Cloudera Manager API version
+  uri:
+    url: http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/api/version
+    method: GET
+    status_code: 200
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    force_basic_auth: yes
+    return_content: yes
+  register: result
+  ignore_errors: True
+
+
+# Set base CM API URL
+- set_fact:
+    cm_api_url: "http://{{ hostvars[scm_hostname]['inventory_hostname'] }}:{{ scm_port }}/api/{{ result.content }}"
+
+- debug:
+    var: cm_api_url
+    verbosity: 1
+
+#https://cloudera.github.io/cm_api/apidocs/v12/path__cm_service_commands_stop.html
+- name: Stop Cloudera Management Services (CMS)
+  uri:
+    url: "{{ cm_api_url }}/cm/service/commands/stop"
+    method: POST
+    status_code: 200
+    force_basic_auth: yes
+    user: "{{ scm_default_user }}"
+    password: "{{ scm_default_pass }}"
+    return_content: yes
+  register: start_resp
+  failed_when: "'startTime' not in start_resp.content"
+  ignore_errors: True
+
+- name: Stop Cloudera Manager
+  service:
+    name: cloudera-scm-server
+    state: stopped
+  ignore_errors: True
+
+- include: databases.yml
+
+- name: Stop MariaDB Service
+  service:
+    name: mariadb
+    state: stopped
+
+- name: Uninstall Cloudera Manager
+  yum:
+    name: cloudera-manager-server.x86_64
+    state: absent
+
+- name: Uninstall MariaDB packages
+  yum:
+    name:
+    - mariadb-server
+    - MySQL-python
+    state: absent
+
+- name: Recursively remove cloudera parcels
+  file:
+    path: /opt/cloudera
+    state: absent
+
+- name: Recursively remove cloudera management service
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/lib/cloudera-scm-navigator
+    - /var/lib/cloudera-host-monitor
+    - /var/lib/cloudera-scm-eventserver
+    - /var/log/cloudera-scm-server
+    - /var/log/cloudera-scm-navigator
+    - /var/log/cloudera-scm-headlamp
+    - /var/log/cloudera-scm-firehose
+    - /var/log/cloudera-scm-eventserver
+    - /var/log/cloudera-scm-alertpublisher
+    - /var/lib/cloudera-service-monitor
+    - /var/lib/cloudera-scm-server
+    - /etc/cloudera-scm-server
+    - /var/lib/cloudera-scm-headlamp

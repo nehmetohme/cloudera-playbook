@@ -1,0 +1,56 @@
+- name: Remove CM Repo (and clean up left-over metadata)
+  yum_repository:
+    name: cloudera-manager
+    state: absent
+  notify: yum-clean-metadata
+
+- name: Stop Cloudera Agents
+  service:
+    name: cloudera-scm-agent
+    state: stopped
+  ignore_errors: True
+
+- name: Uninstall Cloudera Manager Agents
+  yum:
+    name:
+    - cloudera-manager-daemons
+    - cloudera-manager-agent
+    state: absent
+  ignore_errors: True
+
+
+- name: Delete UUID
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /var/lib/cloudera-scm-agent/cm_guid
+    - /var/lib/cloudera-scm-agent/uuid
+    - /var/lib/cloudera-scm-navigator/instance.uuid
+
+- name: Recursively remove cloudera parcels
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /opt/cloudera
+    - /var/log/cloudera-scm-agent
+    - /var/lib/cloudera-scm-agent
+    - /etc/cloudera-scm-agent
+    - /var/log/hadoop-hdfs
+    - /etc/sentry
+    - /etc/hive
+    - /var/log/hadoop-hdfs
+    - /var/log/sentry
+    - /var/log/zookeeper
+    - /var/log/hbase
+    - /var/log/hive
+    - /var/log/hadoop-hdfs
+    - /etc/hadoop
+    - /etc/hbase
+    - /etc/spark
+    - /var/log/hadoop-httpfs
+    - /var/log/oozie
+    - /var/log/impalad
+    - /var/log/catalogd
+    - /var/log/hadoop-yarn

@@ -1,0 +1,15 @@
+---
+# Cleanup Previous Installation
+
+- name: Stop CDH Services
+  hosts: cdh_servers
+  roles:
+    - cdh_cleanup
+  tags: cdh_cleanup
+
+- name: Stop CM Server
+  hosts: scm_server
+  roles:
+    - scm_cleanup
+  tags: scm_cleanup
+

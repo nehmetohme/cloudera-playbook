@@ -1,0 +1,119 @@
+---
+
+- name: Remove group 'hadoop'
+  group:
+    name: hadoop
+
+- name: Remove user 'flume'
+  user:
+    name: flume
+    state: absent
+    remove: yes
+
+- name: Remove user 'hbase'
+  user:
+    name: hbase
+    state: absent
+    remove: yes
+
+- name: Remove user 'hdfs'
+  user:
+    name: hdfs
+    state: absent
+    remove: yes
+
+- name: Remove user 'hive'
+  user:
+    name: hive
+    state: absent
+    remove: yes
+
+- name: Remove user 'httpfs'
+  user:
+    name: httpfs
+    state: absent
+    remove: yes
+
+- name: Remove user 'hue'
+  user:
+    name: hue
+    state: absent
+    remove: yes
+
+- name: Remove user 'impala'
+  user:
+    name: impala
+    state: absent
+    remove: yes
+
+- name: Remove user 'kafka'
+  user:
+    name: kafka
+    state: absent
+    remove: yes
+
+- name: Remove user 'kms'
+  user:
+    name: kms
+    state: absent
+    remove: yes
+
+- name: Remove user 'kudu'
+  user:
+    name: kudu
+    state: absent
+    remove: yes
+
+- name: Remove user 'mapred'
+  user:
+    name: mapred
+    state: absent
+    remove: yes
+
+- name: Remove user 'oozie'
+  user:
+    name: oozie
+    state: absent
+    remove: yes
+
+- name: Remove user 'sentry'
+  user:
+    name: sentry
+    state: absent
+    remove: yes
+
+- name: Remove user 'solr'
+  user:
+    name: solr
+    state: absent
+    remove: yes
+
+- name: Remove user 'spark'
+  user:
+    name: spark
+    state: absent
+    remove: yes
+
+- name: Remove user 'sqoop'
+  user:
+    name: sqoop
+    state: absent
+    remove: yes
+
+- name: Remove user 'sqoop2'
+  user:
+    name: sqoop2
+    state: absent
+    remove: yes
+
+- name: Remove user 'yarn'
+  user:
+    name: yarn
+    state: absent
+    remove: yes
+
+- name: Remove user 'zookeeper'
+  user:
+    name: zookeeper
+    state: absent
+    remove: yes
